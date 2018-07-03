@@ -1,4 +1,4 @@
-#' Compute similarity between two mutation data.
+#' Compute similarity between two mutation data
 #'
 #' @keywords internal
 #' @param mut1 Input sample mutation data.
@@ -7,10 +7,12 @@
 #' @return Score of similarity
 
 computeSim = function(mut1, mut2){
+  mut1 = as.numeric(mut1)
+  mut2 = as.numeric(mut2)
   similarity = sum(mut1*mut2)/(sqrt(sum(mut1**2)) * sqrt(sum(mut2**2)))
 }
 
-#' Title
+#'  Transform the input data to simSig input data
 #'
 #' @param tmMut Location of the mutation file that is to be converted or name of data frame in environment.
 #' Use data(sample.mut.ref) to see the example data.
@@ -57,27 +59,49 @@ transMut = function(tmMut, bsg = NULL){
 #' @examples testSim = sigSim(trTmMut = sample.mut.trans, clinicalData = sample.clinical, contexts.needed = TRUE)
 sigSim = function(trTmMut, clinicalData, tmMutRef = mSigdb, contexts.needed = FALSE, tri.counts.method = 'default'){
   sampleList = rownames(trTmMut)
+  siteList = names(table(mSigdb$tmSite))
+  brow = nrow(clinicalData)
+  clinicalData = clinicalData[(clinicalData$tmSite%in%siteList), ]
+  arow = nrow(clinicalData)
+  if (brow == arow) {
+  }else{
+    warning(paste(brow - arow,"samples were not calculated because their sites are not part of the tmMutRef."), call. = FALSE)
+  }
   deconSigs = list()
   for (sample_id in sampleList) {
-    deconSigs[[sample_id]] = whichSignatures(tumor.ref = trTmMut,
+    deconSigs[[sample_id]] = deconstructSigs::whichSignatures(tumor.ref = trTmMut,
                                              sample.id = sample_id,
                                              contexts.needed = contexts.needed,
                                              tri.counts.method = tri.counts.method,
                                              signatures.ref = signatures.cosmic)
   }
-  simScores = list()  
+  simScores = list()
+  misCountry = 0
   for (sample_id in names(deconSigs)) {
     sample_mut = deconSigs[[sample_id]]
     sample_mut = as.numeric(unname(sample_mut$weights))
     sample_cli = unname(clinicalData[as.character(clinicalData$sampleId) == as.character(sample_id), ])
-    ref_mut = unname(unlist(tmMutRef[tmMutRef$Country == as.character(sample_cli[[3]]) & tmMutRef$tmSite == as.character(sample_cli[[2]]), ]))[c(3:32)]
+    sample_country = as.character(sample_cli[[3]])
+    sample_Site = as.character(sample_cli[[2]])
+    tmMutRef = tmMutRef[tmMutRef$tmSite == sample_Site, ]
+    refCountry = as.character(tmMutRef$Country)
+    if(sample_country%in%refCountry){
+    }else{
+      sample_country = refCountry[1]
+      misCountry =  misCountry + 1
+    }
+    ref_mut = unname(unlist(tmMutRef[(tmMutRef$Country == sample_country & tmMutRef$tmSite == sample_Site), ]))[c(3:32)]  
     simScores[[sample_id]] = computeSim(sample_mut, ref_mut)
+  }
+  if (misCountry == 0) {
+  }else{
+    warning(paste(misCountry,"samples use the default country param because their countries are not part of the tmMutRef."), call. = FALSE)
   }
   simScores
 }
-                    
 
-#' Title
+
+#' Plot the signature ratio
 #'
 #' @param tmMutRef Location of the mutation file that is to be converted or name of data frame in environment.
 #' "tmMutRef" is the standard signature value for one site and one country.
@@ -105,9 +129,18 @@ sigSim = function(trTmMut, clinicalData, tmMutRef = mSigdb, contexts.needed = FA
 #' @return Plot a histogram to compare sample and ref.
 #' @export
 #'
-#' @examples testPlot = plotSig(trTmMut = sample.mut.trans, tmSite = "Bone", country = "UK", sampleId = "1", contexts.needed = TRUE)
+#' @examples testPlot = plotSig(trTmMut = sample.mut.trans, tmSite = "bone", country = "UK", sampleId = "1", contexts.needed = TRUE)
 plotSig = function(trTmMut, tmSite, country, tmMutRef = mSigdb, sampleId, contexts.needed = FALSE, tri.counts.method = 'default'){
-  sampleSig = whichSignatures(tumor.ref = trTmMut,
+  siteList = names(table(tmMutRef$tmSite))
+  if (!(tmSite%in%siteList)) {
+    stop("The tmSite is not in tmMutref")
+  }
+  tmRef = tmMutRef[tmMutRef$tmSite==tmSite, ]
+  countryList = as.character(tmRef$Country)
+  if (!(country%in%countryList)) {
+    stop(paste("The country should be",countryList))
+  }
+  sampleSig = deconstructSigs::whichSignatures(tumor.ref = trTmMut,
                               sample.id = sampleId,
                               contexts.needed = contexts.needed,
                               tri.counts.method = tri.counts.method,

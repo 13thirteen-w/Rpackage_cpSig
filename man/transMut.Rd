@@ -2,7 +2,7 @@
 % Please edit documentation in R/cpSig.R
 \name{transMut}
 \alias{transMut}
-\title{Title}
+\title{Transform the input data to simSig input data}
 \usage{
 transMut(tmMut, bsg = NULL)
 }
@@ -18,7 +18,7 @@ A data frame that contains sample IDs for the rows and trinucleotide contexts fo
 Each entry is the count of how many times a mutation with that trinucleotide context is seen in the sample.
 }
 \description{
-Title
+Transform the input data to simSig input data
 }
 \examples{
 testTrans = transMut(tmMut = sample.mut.ref)

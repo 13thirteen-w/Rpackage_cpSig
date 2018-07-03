@@ -2,7 +2,7 @@
 % Please edit documentation in R/cpSig.R
 \name{plotSig}
 \alias{plotSig}
-\title{Title}
+\title{Plot the signature ratio}
 \usage{
 plotSig(trTmMut, tmSite, country, tmMutRef = mSigdb, sampleId,
   contexts.needed = FALSE, tri.counts.method = "default")
@@ -41,8 +41,8 @@ USe data("mSigdb") to see the example dasta.}
 Plot a histogram to compare sample and ref.
 }
 \description{
-Title
+Plot the signature ratio
 }
 \examples{
-testPlot = plotSig(trTmMut = sample.mut.trans, tmSite = "Bone", country = "UK", sampleId = "1", contexts.needed = TRUE)
+testPlot = plotSig(trTmMut = sample.mut.trans, tmSite = "bone", country = "UK", sampleId = "1", contexts.needed = TRUE)
 }

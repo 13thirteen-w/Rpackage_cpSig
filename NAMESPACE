@@ -3,5 +3,4 @@
 export(plotSig)
 export(sigSim)
 export(transMut)
-importFrom(deconstructSigs,mut.to.sigs.input)
-importFrom(deconstructSigs,whichSignatures)
+import(deconstructSigs)

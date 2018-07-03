@@ -2,7 +2,7 @@
 % Please edit documentation in R/cpSig.R
 \name{computeSim}
 \alias{computeSim}
-\title{Compute similarity between two mutation data.}
+\title{Compute similarity between two mutation data}
 \usage{
 computeSim(mut1, mut2)
 }
@@ -15,6 +15,6 @@ computeSim(mut1, mut2)
 Score of similarity
 }
 \description{
-Compute similarity between two mutation data.
+Compute similarity between two mutation data
 }
 \keyword{internal}
