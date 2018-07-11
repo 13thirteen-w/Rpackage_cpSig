@@ -3,9 +3,9 @@
 \docType{data}
 \name{mSigdb}
 \alias{mSigdb}
-\title{Values for 73 Cancer project}
+\title{Values for 28 Cancer project}
 \format{A data frame of 32 rows and 73 columns}
 \description{
-A dataset containing the value for 73 projects that sort out by mSignaturesdb
+A dataset containing the value for 28 projects that sort out by mSignaturesdb
 }
 \keyword{datasets}

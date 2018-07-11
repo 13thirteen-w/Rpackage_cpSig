@@ -1,6 +1,16 @@
-#' Values for 73 Cancer project 
+#' Values for 65 Cancer project 
 #' 
-#' A dataset containing the value for 73 projects that sort out by mSignaturesdb
+#' A dataset containing the value for 65 projects that sort out by mSignaturesdb
+#' 
+#' @docType data
+#' @keywords datasets
+#' @name mSigsitedb
+#' @format A data frame of 32 rows and 65 columns
+NULL
+
+#' Values for 28 Cancer project 
+#' 
+#' A dataset containing the value for 28 projects that sort out by mSignaturesdb
 #' 
 #' @docType data
 #' @keywords datasets
